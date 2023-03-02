@@ -13,8 +13,8 @@ original design.
 
 <br>
 
-![Introduction to Cadin Image.](/public/blog/interesting/cadinlang/0.jpeg)
-![Details of Cadin Image.](/public/blog/interesting/cadinlang/1.jpeg)
+![Introduction to Cadin Image.](/blog/interesting/cadinlang/0.jpeg)
+![Details of Cadin Image.](/blog/interesting/cadinlang/1.jpeg)
 
 <style>
 img {
