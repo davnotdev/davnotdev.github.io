@@ -2,8 +2,11 @@
 layout: ../../../layouts/BlogLayout.astro
 ---
 
-# Cadin
+# Renghlish
 
+> More Contruction.
+
+<!--
 Yes, I wrote this on physical paper.
 Sorry if the aspect ratios aren't good and all that.
 For context, I was bored during History class, so I decided to create my own
@@ -15,6 +18,7 @@ original design.
 
 ![Introduction to Cadin Image.](/blog/interesting/cadinlang/0.jpeg)
 ![Details of Cadin Image.](/blog/interesting/cadinlang/1.jpeg)
+-->
 
 <style>
 img {

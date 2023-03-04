@@ -9,7 +9,7 @@ Well, here's what I've got so far.
 
 ## Interesting
 
-- [Cadin: Writing English is too boring.](/blog/interesting/cadinlang)
+- [Renghlish: When writing English is too boring.](/blog/interesting/renghlish)
 
 ## Tutorials
 
