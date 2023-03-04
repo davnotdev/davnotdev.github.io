@@ -8,7 +8,10 @@ const { title } = Astro.props;
 ---
 
 <Layout title={title}>
-        <a href="/blog/" id="home">Home</a>
+    <div id="side_stick">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog Home</a>
+    </div>
     <main>
         <slot/>
     </main>
@@ -34,11 +37,12 @@ const { title } = Astro.props;
     code {
         font-size: 1.1rem;
     }
-    #home {
+    #side_stick {
         position: sticky;
         top: 1rem;
         left: 1rem;
-        height: 100vh;
+        display: flex;
+        flex-direction: column;
     }
     </style>
 </Layout>
