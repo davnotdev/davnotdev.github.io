@@ -36,7 +36,7 @@ height: 100vh;
 ```plaintext
 ─────    <= vowel lane
 
-a b c    <= constanants
+a b c    <= consonants
 
 ─────    <= modifiers lane
 ```
