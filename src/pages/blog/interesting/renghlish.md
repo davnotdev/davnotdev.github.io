@@ -111,6 +111,8 @@ You always read left to right, but the vowel lane has more priority.
 
 <img src="/blog/interesting/renghlish/2.jpeg" alt="Your Prize image goes here." id="prize"/>
 
+> Yes, there are mistakes here, but it's still readable.
+
 ## Conclusion
 
 Hey, thanks for reading thus far.
