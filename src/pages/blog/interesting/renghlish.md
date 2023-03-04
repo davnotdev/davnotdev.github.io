@@ -62,6 +62,16 @@ Renghlish uses this idea to some extent with modifiers.
 │   is p.  │   is a modified p aka b.
 │          │
 │          ┴──
+
+But if it goes throught the line:
+
+┌─╮        ┌─╮
+│          │
+│          │
+│   is p.  │   is a b.
+│          │
+┼──        ┴──
+
 ```
 
 ### 3. Memorization Time
