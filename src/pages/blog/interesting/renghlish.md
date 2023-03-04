@@ -117,6 +117,5 @@ img { padding: 0% 0% 2% 25%; width: 50%; }
 #prize { padding: 0% 0% 2% 10%; width: 80%; }
 h4 {
     text-align: center;
-    font-size: 1.6rem;
 }
 </style>
