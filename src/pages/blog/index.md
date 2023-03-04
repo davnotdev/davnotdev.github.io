@@ -15,4 +15,4 @@ Well, here's what I've got so far.
 
 ## Cool Projects
 
-- [Mewo: The Why and How Part of the Project.](/blog/coolprojects/mewo_explained_0)
+- [Mewo Explained \[0\]: The why and how of `mewo_galaxy`.](/blog/coolprojects/mewo_explained_0)

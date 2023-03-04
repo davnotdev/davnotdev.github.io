@@ -16,8 +16,6 @@ Ah wait, most languages do that but with slight variations...
 Anyway, my point is that we can do better!
 
 ```plaintext
-top: 0;
-height: 100vh;
   │╭────╮  │  │ ·   │   ·     │╭──     ┌─╮·    │ · ──╮
  ─┼┼────┼──┼──┼─────┼  ───   ─┼┼──     │───────┼─────┼
   │╰──  │  │  │ ╭   │   ╭     │╰── ╭   │  ·    │     │
