@@ -15,24 +15,22 @@ But David!
 You're 16, why waste your life away building a game engine?
 Go build a website or a game or whatever kids build nowadays.
 
-Well, originally, I started building game engines because I thought that I
-could do better.
-My laptop was simply to slow to run Unity.
-Of course, I've learned over the years that I definitely can't do better than
-Unity especially at a macro level, but then again, is that really the point?
-Building Mewo and my other failure game engine projects has helped me gain an appreciation
-for the existing game making tools out there that we all take for granted.
-Everyone likes to roast engines like Roblox or whatever engine was used for
-Fallout 76, but you have to admire the engineering horsepower and the hours
+Why do I enjoy this?
+Well, it's just a lot of fun!
+Although I do feel sometimes that I'm wasting my time, I do find that the skills
+I've obtained with these type of projects do translate to actual programming and
+problem solving skills.
+Also, building Mewo and my other failure game engine projects has helped me gain
+an appreciation for the existing game making tools out there that we all take
+for granted. Everyone likes to roast engines like Roblox or whatever engine was
+used for Fallout 76, but you have to admire the engineering horsepower and the hours
 people have put in to create them.
-Oh, almost forgot.
-It's just a lot of fun!
 
 Anyway, I should probably elaborate some more on what I'll be talking about here.
 The article this is called "Mewo Explained [0]" because Mewo is designed to
 be modular.
 Rather than being one big blob, Mewo is composed of it's core ECS called
-`mewo_galaxy` and supported by other `std` crates.
+`mewo_galaxy` and supported by other `mewo_std` crates.
 `mewo_galaxy` is almost entirely dependency free, but by itself, it cannot do
 physics, rendering, or anything else we expect from
 game engines.
@@ -391,10 +389,27 @@ Today, there is the raw ECS as well as the user facing ECS.
 In more _design pattern_-y terms: The internal, ugly functionality of the entity
 component system (called the raw ECS) is then abstracted away by a pretty facade.
 
+### \#\#\# Deferring Insertions
+
+One difficult problem all game engines face is ordering.
+Certain systems must come after certain other systems because of events.
+If my game code runs before my input code, my game code won't be aware of new
+keyboard inputs.
+More problems arise with an archetypal ECS solution.
+Every time an entity gets a component added to it, it must transfer archetypes.
+This is an operation requires mutability and essentially freezes those storages
+for a bit.
+Instead of freezing in the middle of the frame, we can defer the insertions of
+events, entities, and components to the end of the frame.
+Not only is this simpler, but it also opens the door for additional optimization
+opportunities.
+
 ### \#\#\# Get to Know Your Planets
 
 And no, I'm not talking about the planets they taught you in the 4th grade.
-Originally called "Managers", planets are mostly independent pieces that manage
+They should be called "Managers", and if you look back at the commit history,
+that is what they were called, but I got bored of typing "Manager" over and over.
+Anyway, planets are mostly independent pieces that manage
 the internal state of the engine.
 Let's have a look at them!
 
@@ -406,6 +421,58 @@ Let's have a look at them!
 - `StatePlanet`
 - `ResourcePlanet`
 - `QueryPlanet`
+
+Ok, some of these are pretty straight forward.
+`StatePlanet`, `ResourcePlanet`, `EventPlanet`, and `EntityPlanet` dead very simple.
+They do exactly what their names suggest, and if you want more elaboration, just
+[look into the code](https://github.com/davnotdev/mewo/tree/main/galaxy/src/ecs).
+You could skim them considering that none of these planets exceed 100 lines of code.
+
+#### \#\#\#\# Component Planets
+
+You may have noticed that there are two planets for components, and there is a
+good reason for this.
+`ComponentTypePlanet` is most simple, storing a map of component types and how
+to safely clone and free them.
+Each component gets a `ComponentTypeId` which is actually a hash derived from
+its type (`std::any::TypeId` essentially).
+A `ComponentGroupPlanet` holds `ComponentGroup`s which in turn hold a list of `ComponentTypeId`s.
+You can essentially think of a `ComponentGroup` as an archetype.
+These groups are identified by a `ComponentGroupId`.
+Now, the only trick with `ComponentGroup`s is that their inner `ComponentTypeId`s
+are sorted.
+To explain why, we must look at the classic ABBA problem.
+
+```plaintext
+Archetype AB
+A: | 0 | 1 | 2 | 3 | 4 | 5 |
+B: | 0 | 1 | 2 | 3 | 4 | 5 |
+```
+
+Let's thread #1 decides to take the lock of AB.
+It cannot do this in one go.
+Rather, it must first take A, then B.
+This means that if thread #2 tries to take BA, there is a small chance that
+thread #1 locks A while thread #2 locks B.
+Now, thread #1 sees that B is locked and waits.
+However, thread #2 sees that A is locked and waits, causing a deadlock.
+By having components be sorted, access will always come in the order of AB or ABC.
+Since locks are taken in one direction only, there can never be a deadlock.
+
+```plaintext
+Archetype AB
+A: | 0 | 1 | 2 | 3 | 4 | 5 |
+B: | 0 | 1 | 2 | 3 | 4 | 5 |
+
+Archetype BA
+B: | 0 | 1 | 2 | 3 | 4 | 5 |
+A: | 0 | 1 | 2 | 3 | 4 | 5 |
+```
+
+Sorting also makes it impossible for there to be two archetypes that have the
+same components!
+
+#### \#\#\#\# Storage Planet
 
 ```plaintext
    +---------------+
