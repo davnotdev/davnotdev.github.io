@@ -10,8 +10,11 @@ Well, here's what I've got so far.
 ## Interesting
 
 - [Renghlish: When writing English is too boring.](/blog/interesting/renghlish)
+- [Modern Classic Tetris Is Alive, but Has Classic Tetris Died?](/blog/interesting/modern_classic_tetris)
 
 ## Tutorials
+
+- [Vulkan: The Big Picture](/blog/tutorials/vulkan_big_picture)
 
 ## Cool Projects
 
