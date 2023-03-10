@@ -373,9 +373,7 @@ That way, you get to leverage the performance benefits of ECS at the lowest leve
 > I've mentioned this over and over, but in the Rust world, [Bevy](https://bevyengine.org/)
 > would be the textbook example of an ECS game engine.
 
-## \#\# Mewo's Implementation
-
-### \#\#\# The Raw ECS
+## \#\# Mewo's Implementation (The Raw ECS)
 
 Raw ECS?
 How is this different from a cooked ECS or a medium rare ECS?
@@ -428,7 +426,7 @@ They do exactly what their names suggest, and if you want more elaboration, just
 [look into the code](https://github.com/davnotdev/mewo/tree/main/galaxy/src/ecs).
 You could skim them considering that none of these planets exceed 100 lines of code.
 
-#### \#\#\#\# Component Planets
+### \#\#\# Component Planets
 
 You may have noticed that there are two planets for components, and there is a
 good reason for this.
@@ -440,7 +438,7 @@ A `ComponentGroupPlanet` holds `ComponentGroup`s which in turn hold a list of `C
 You can essentially think of a `ComponentGroup` as an archetype.
 These groups are identified by a `ComponentGroupId`.
 Now, the only trick with `ComponentGroup`s is that their inner `ComponentTypeId`s
-are sorted.
+are always sorted.
 To explain why, we must look at the classic ABBA problem.
 
 ```plaintext
@@ -470,9 +468,138 @@ A: | 0 | 1 | 2 | 3 | 4 | 5 |
 ```
 
 Sorting also makes it impossible for there to be two archetypes that have the
-same components!
+same components as shown above.
 
-#### \#\#\#\# Storage Planet
+### \#\#\# Storage Planet
+
+`StoragePlanet` is the bulk of the system.
+All it does is store the actual components with the archetypal storage method.
+On the surface, it's pretty simple:
+
+```rust
+#[derive(Debug)]
+pub struct StoragePlanet {
+    null_group: ComponentGroupId,
+    storages: SparseSet<ComponentGroupId, StorageBloc>,
+    entities: SparseSet<Entity, ComponentGroupId>,
+}
+```
+
+When `StoragePlanet` is created, `null_group` is registered for entities that
+don't have any components.
+All newly spawned components will start out in this group.
+The `storages` and `entities` fields are also pretty self explanatory.
+Inserting, removing, or moving (to another archetype) entities can be done with
+a `StorageTransform`.
+During transformation, if the `StoragePlanet` finds a new `ComponentGroupId`,
+it will both create a new archetype itself and inform the `QueryPlanet`.
+
+Each archetype has its own `StorageBloc` which is defined as the following:
+
+```rust
+//      DVec    DVec    DVec
+//  e   d       d       d
+//  e   d       d       d
+#[derive(Debug)]
+pub(super) struct StorageBloc {
+    datas: Vec<(ComponentTypeId, StorageRow)>,
+    entities: Vec<Entity>,
+}
+```
+
+A `DVec` is essentially a `std::vec::Vec` sans generics.
+In this case, each component type has it's own `DVec`, or here it's wrapped by a
+`StorageRow`.
+Well, I guess `StorageRow` should actually be called `StorageColumn`.
+The reason why we don't use DVec directly is because of copy price.
+
+### \#\#\# Copy Price and Storage Rows
+
+Have a peek into `mewo_galaxy_derive`, and you'll find derives with funny names
+like `CheapComponent` and `UniqueComponent`.
+In Rust, there are two methods of copying data `Clone` and `Copy`.
+`Copy` is for objects that can be safely copied byte for byte i.e. `memcpy`.
+`Clone` if for objects that involves pointer and require the invocation of a
+copy constructor.
+I've observed that most components in games are actually `Copy`.
+
+Well, we can actually take advantage of this for more threading performance.
+You see, when using a read-write lock, there can only be ONE writer at a time.
+This means that all readers get blocked until the write finishes.
+`StorageRow` has two types: `StorageRow::Normal` for `Clone` components and
+`StorageRow::CopyCat` for `Copy` components.
+Where the former holds a singular `DVec` normally, the latter hold two: one for
+readers and one for writers.
+At the end of every frame, the writer's data is copied into the reader's.
+These copies are cheap because our component is `Copy`!
+With this setup, readers can read whenever even when there is a writer.
+
+### \#\#\# Access Logic with `QueryPlanet`
+
+When we query for components like so: `query::<&mut Transform>().with::<Player>()`,
+we don't want to constantly search `StoragePlanet` every time.
+Rather, it would be more efficient to cache these results.
+These results can then be accessed with a `QueryId`.
+Currently, the following queries and filters are allowed
+
+```rust
+#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
+pub enum QueryAccessType {
+    Read,
+    Write,
+    OptionRead,
+    OptionWrite,
+}
+
+#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
+pub enum QueryFilterType {
+    With,
+    Without,
+}
+```
+
+> `OptionRead` and `OptionWrite` is essentially `query::<Option<&mut Transform>>()`.
+
+The only bit to note is how `QueryPlanet` updates.
+When a unrecognized group is added, `QueryPlanet` will inform `StoragePlanet`,
+before updating.
+If a new component group is added, all previous queries must be updated.
+If I have a query for `A`, and a new archetype `ABC` is created, `A` should also
+match `ABC`.
+
+### \#\#\# That's Pretty Much All
+
+Wow, you made it all the way here.
+Please give yourself a pat on the back.
+We are almost there, just keep reading!
+
+## \#\# Logging Interlude
+
+Knowing what's wrong with your code is very very important, so Mewo features a
+global logging solution.
+My issue with many logging systems is how logs often get squished together.
+Mewo uses folds to solve this.
+
+```rust
+fn my_system() {
+    mfold!("my_system");
+    {
+        mfold!("Block A");
+        merr!("All OK!");
+    }
+    {
+        mfold!("Block B");
+        merr!("Something blew up!");
+    }
+}
+```
+
+Mewo also has separate channels depending on the thread.
+
+## \#\# What the User Sees
+
+I've been talking about planets and ids and all these details, but we have yet
+to see the APIs that users will actually interact with.
 
 ```plaintext
    +---------------+
