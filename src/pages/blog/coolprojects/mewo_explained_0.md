@@ -386,6 +386,7 @@ However, remnants of this idea are still found in Mewo.
 Today, there is the raw ECS as well as the user facing ECS.
 In more _design pattern_-y terms: The internal, ugly functionality of the entity
 component system (called the raw ECS) is then abstracted away by a pretty facade.
+The code for this is held in the [`ecs` folder](https://github.com/davnotdev/mewo/tree/main/galaxy/src/ecs).
 
 ### \#\#\# Deferring Insertions
 
@@ -421,10 +422,31 @@ Let's have a look at them!
 - `QueryPlanet`
 
 Ok, some of these are pretty straight forward.
-`StatePlanet`, `ResourcePlanet`, `EventPlanet`, and `EntityPlanet` dead very simple.
+`StatePlanet`, `ResourcePlanet`, and `EventPlanet` are dead very simple.
 They do exactly what their names suggest, and if you want more elaboration, just
 [look into the code](https://github.com/davnotdev/mewo/tree/main/galaxy/src/ecs).
 You could skim them considering that none of these planets exceed 100 lines of code.
+
+### \#\#\# Generational Indices
+
+I want to take a moment to talk about `EntityPlanet` because of generational indices.
+If you are building a game engine and you haven't heard of generational indices,
+[read about them right now](https://lucassardois.medium.com/generational-indices-guide-8e3c5f7fd594)!
+
+Let's say I have an entity `EntityId(88)`.
+If I store that entity and someone else decides to delete `EntityId(88)`, my
+stored entity is now invalid.
+But, someone could create a new `EntityId(88)` while I still think my `EntityId(88)`
+is still valid.
+This will lead to some unimaginably stupid bugs.
+
+Generational indices basically puts another number into the `EntityId` that
+increments with every new generation, hence the name.
+Now, my entity is `EntityId(88, 0)`.
+If the same happens and a new entity is born, this new entity would be of id
+`EntityId(88, 1)`, one generation up from mines.
+
+I absolutely love solutions like this one.
 
 ### \#\#\# Component Planets
 
@@ -598,8 +620,91 @@ Mewo also has separate channels depending on the thread.
 
 ## \#\# What the User Sees
 
-I've been talking about planets and ids and all these details, but we have yet
-to see the APIs that users will actually interact with.
+I've been talking about planets and ids and all these boring implementation
+details, but we have yet to see the APIs that users will actually interact with.
+The code for this is held in the [`galaxy` folder](https://github.com/davnotdev/mewo/tree/main/galaxy/src/galaxy).
+This is really just one big type: the `Galaxy`.
+
+```rust
+pub struct Galaxy {
+    ep: RwLock<EntityPlanet>,
+    ctyp: RwLock<ComponentTypePlanet>,
+    cgp: RwLock<ComponentGroupPlanet>,
+    rcp: RwLock<ResourcePlanet>,
+    evp: RwLock<EventPlanet>,
+    qp: RwLock<QueryPlanet>,
+    sp: RwLock<StoragePlanet>,
+    stp: StatePlanet,
+
+    ev_modify: ThreadLocal<EventModify>,
+    st_transforms: ThreadLocal<Vec<StorageTransform>>,
+}
+```
+
+`Galaxy` literally just holds all the planets.
+The `ev_modify` and `st_transforms` is just the deferred insertions that I
+mentioned earlier.
+`Galaxy::update` is called to "flush" these insertions.
+
+> Yes, yes, I know, it should be called a "star system" instead.
+
+### \#\#\# Maybe Insert
+
+If you poke around with the code, you may see the term `maybe_insert` sprinkled everwhere.
+To understand this, we must go back in time.
+
+```rust
+fn plugin(pb: PluginBuilder) -> PluginBuilder {
+    pb.comp::<Player>()
+        .comp::<Obsticle>()
+        .comp::<Collider>()
+        .event::<ObsticleColliderCheckEvent>()
+        .resource::<ObsticleSpawnTimer>()
+        -- snip --
+        .sys(game_collider_send)
+        .sys(game_collider_check)
+    ;
+}
+
+```
+
+I couldn't find an extreme case, but this is a very old version of Mewo.
+Both before and now, the ECS requires you to declare all component types, event
+types, etc.
+Because of this, past versions had you declare each and every component, event,
+and resource you used.
+If you didn't you'd get a weird and confusing error somewhere later.
+As you can imagine, this is simply stupid, so the solution right now is to try
+to insert the type anyway at every call to the ECS.
+For example:
+
+```rust
+pub fn insert_resource<R: Resource, RH: Clone + Hash + 'static>(&self, rh: RH, r: R) -> &Self {
+    let id = hash_resource_id(rh.clone());
+    self.resource_maybe_insert::<R, RH>(rh);
+    --- snip ---
+    self
+}
+```
+
+### \#\#\# Magic Query
+
+The querying code is the most complex, and it makes me uncomfortable reading it.
+First of all, there are access traits like the following:
+
+- `ComponentAccessesNormal`: `(A, B, C)`
+- `ComponentAccessesOptional`: `(Option<&A>, &mut B)`
+
+I put the use cases that these access traits are implemented for above for more context.
+`ComponentAccessesNormal` is used where having a `&` or `&mut` makes no sense,
+specifically when doing `.with::<SomeComponent>()` or `.without::<SomeComponent>()`.
+`ComponentAccessesOptional` is used for `.query::<&SomeComponent>()`.
+
+Like I said, I don't like looking at the query code.
+All I'll say is that the query then locks and obtains lists of pointers from `StorageRows`s.
+The access traits handle the rest.
+
+### \#\#\# The Everything Else
 
 ```plaintext
    +---------------+
