@@ -10,7 +10,8 @@ Well, here's what I've got so far.
 ## Interesting
 
 - [Renghlish: When writing English is too boring.](/blog/interesting/renghlish)
-- [Modern Classic Tetris Is Alive, but Has Classic Tetris Died?](/blog/interesting/modern_classic_tetris)
+<!--  - [Modern Classic Tetris Is Alive, but Has Classic Tetris Died?](/blog/interesting/modern_classic_tetris) -->
+- [Dancing on the Line of Requirement with LISP.](/blog/interesting/dancing_with_lisp)
 
 ## Tutorials
 
