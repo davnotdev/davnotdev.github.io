@@ -6,6 +6,7 @@ layout: ../../layouts/BlogLayout.astro
 
 Hi, so you want to read more?
 Well, here's what I've got so far.
+Lot's of work in progress, but they will be finished soon ;).
 
 ## Interesting
 
