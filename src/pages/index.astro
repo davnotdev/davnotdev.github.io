@@ -1,45 +1,67 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Projects from '../components/Projects.astro'
+
+//  Good enough estimate I suppose.
+let month = 6;
+let codingStart = new Date(2019, month);
+let timeSinceCodingStart = Date.now() - codingStart.getTime();
+let dateSinceCodingStart = new Date(timeSinceCodingStart);
+let yearsSinceCodingStart = Math.floor(
+    (   
+        (Math.abs(dateSinceCodingStart.getUTCFullYear() - 1970) +
+        dateSinceCodingStart.getMonth() / 12) * 10
+    )
+) / 10;
 ---
 
-<Layout title="Welcome.">
-	<main>
-		<h1>👋 Hi! I'm David.</h1>
-        <p>
-        I'm a high schooler who also happens to be a hobbist programmer.<br>
-        This page is under construction 🚧!<br> 
-        Here's a cookie 🥠 and some cool projects instead.</p>
-        <ul>
-            <li><a href="/blog/coolprojects/mewo_explained_0">Mewo</a> is a work in progress ecs game engine.</li>
-            <li><a href="https://github.com/davnotdev/mepeyew">Mepeyew</a> is a rendering API abstracion layer.</li>
-            <li><a href="/blog/interesting/renghlish/">Renghlish</a>: when English gets boring.</li>
-            <li><a href="https://github.com/Alex-RV/DALY">Elgoog</a> is an upside down search engine created for Lancer Hacks.</li>
-            <li>Set up <a href="https://github.com/davnotdev/rust_arduino_uno_template">Rust on the arduino</a>. It can be done, but should it?</li>
-            <li>A step by step <a href="https://github.com/davnotdev/vulkan-rust-step-by-step">Vulkan Reference</a> for people who can't remember what a <code>VkPipelineRasterizationStateCreateInfo</code> is.</li>
-            <li>This is my <a href="https://github.com/davnotdev/dotnvim">Neovim Config</a>. (Best code editor ever.)</li>
-        </ul>
+<Layout title="David's Home Page" description="Hi, I'm David, and this is my website!">
+    <div class="text-center p-10 m-auto flex flex-col justify-center space-y-10">
+        (🚧 Massive Site Overhaul in Progress!)
 
-        <p>Work in progress pages:</p>
-        <ul>
-            <li><a href="/blog">Blog</a></li>
-        </ul>
-	</main>
+        <div class="text-[4rem]">👋🏼 Hi, I'm David.</div>
+
+        <div class="text-[1.8rem]">I'm some guy who knows a lot yet very little.</div>
+        <div class="text-[1.8rem]">
+            For the past {yearsSinceCodingStart} years, I've doing stupid things with programming.
+        </div>
+        <div class="text-[1.8rem]">
+            Although not entirely true, that's the focus purpose of this site.
+        </div>
+
+        <br>
+
+        <div class="flex flex-col p-5 space-y-4 xl:flex-row xl:p-12 xl:space-x-10 m-auto justify-evenly bg-night-1">
+            <div class = "flex flex-col justify-evenly space-y-4">
+                <a class="index_box_button" href="/skills">
+                    <div class="mx-auto text-center text-3xl">
+                        My Skills
+                    </div>
+                </a>
+
+                <a class="index_box_button" href="/blog">
+                    <div class="mx-auto text-center text-3xl">
+                        My Blog
+                    </div>
+                </a>
+
+                <a class="index_box_button" href="/blog">
+                    <div class="mx-auto text-center text-3xl">
+                        TODO
+                    </div>
+                </a>
+            </div>
+            <Projects/>
+        </div>
+
+    </div>
 </Layout>
+<style is:global>
+@tailwind components;
 
-<style>
-	main {
-		margin: auto;
-		padding: 1.5rem;
-	}
-	h1 {
-		font-size: 3rem;
-	}
-	p, li {
-		padding: 2rem;
-		font-size: 2rem;
-		margin: 0;
-	}
-    a {
-        font-size: 2rem;
+@layer components {
+    .index_box_button {
+        @apply inline-flex bg-night-2 p-4 rounded-sm shadow-md max-w-2xl min-w-0 w-40 mx-auto hover:transform hover:scale-110 hover:drop-shadow-2xl;
     }
+}
 </style>

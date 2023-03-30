@@ -1,0 +1,14 @@
+---
+export interface Props {
+    name: string;
+    link: string;
+    miniDescription: string;
+}
+
+const { name, link, miniDescription } = Astro.props;
+---
+
+<div class="text-justify bg-night-3 text-xl p-5 shadow-md hover:transform hover:scale-105">
+    <a href={ link }>{ name }: { miniDescription }</a>
+</div>
+

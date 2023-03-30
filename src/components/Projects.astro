@@ -1,0 +1,16 @@
+---
+import ProjectCard from "./ProjectCard.astro";
+---
+
+<div class="bg-night-2 p-6 justify-stretch rounded-sm shadow-md text-3xl">
+    My Cool Projects:
+    <div class="flex flex-col p-4 mx-auto text-xl text-center justify-evenly space-y-4 rounded-sm">
+        <ProjectCard
+            name={ "Mewo" } link={ "/blog/coolprojects/mewo_explained_0" } 
+            miniDescription={ "ECS Game Engine for Rust" }/>
+        <ProjectCard 
+            name={ "Mepeyew" } link={ "https://github.com/davnotdev/mepeyew" } 
+            miniDescription={ "GPU Abstraction Layer for Rust" }/>
+    </div>
+    <a href="/projects" class="inline-block rounded-xl m-2 px-5 py-2 bg-night-3 text-3xl hover:transform hover:scale-125">And Many More!</a>
+</div>
