@@ -1,0 +1,23 @@
+---
+export interface Props {
+    name: string;
+    icon: string;
+    description: string;
+}
+let { name, icon, description } = Astro.props;
+---
+
+<div class="flex bg-night-1 my-10 justify-evenly max-w-lg">
+    <div class="p-10 text-xl">
+        { description }
+    </div>
+    <div class="flex flex-col p-5 space-y-10 place-items-end w-40">
+        <img 
+            src={ icon } alt="(An icon is meant to go here)"
+            class="bg-white w-28 h-28 rounded-xl p-5"></img>
+        <div class="flex">
+            <span class="text-3xl">{ name }</span>
+            <slot/>
+        </div>
+    </div>
+</div>

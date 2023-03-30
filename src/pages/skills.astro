@@ -1,0 +1,184 @@
+---
+import Layout from '../layouts/Layout.astro'
+import SkillCard from '../components/SkillCard.astro'
+---
+
+<Layout title="Skills" description="David's skills.">
+    <div class="space-y-8">
+        <h1>My (Tech) Skills</h1>
+
+        <div class="text-2xl">
+            Most programmers identify themselves with terms such as "frontend developer" or "backend developer".
+            I try not to limit myself with a specialization class.
+            From low level code with assembly to building websites with javascript.
+            I've built games in C# and game engines in C++.
+            I'm not even close knowing everything (I mean, who is?), but my point is that I'm open to learning anything and everything!
+            I'll rank my skills here with the badges below:
+        </div>
+
+        <div class="space-y-2">
+            <div class="text-3xl">
+                <span class="bg-gold badge"></span> Very Familiar
+            </div>
+            <div class="text-3xl">
+                <span class="bg-silver badge"></span> Familiar
+            </div>
+            <div class="text-3xl">
+                <span class="bg-bronze badge"></span> Niche
+            </div>
+        </div>
+
+        <div class="text-night-text">
+        </div>
+
+        <div class="flex flex-col lg:flex-row lg:mx-[-15rem]">
+            <div class="flex-1 flex-col px-10">
+                <h2>Languages</h2>
+                <h3 class="p-5">Of course, what's considered a language is controversial, and so is the notion of being "familiar" with one.<h3>
+                <SkillCard 
+                    name="Rust" 
+                    icon="/skills/logos/rust.svg"
+                    description={`
+                        Being a the world's most beloved language, Rust is one of the only languages I genuinely enjoy writing.
+                    `}>
+                    <span class="bg-gold badge"></span>
+                </SkillCard>
+
+                <SkillCard 
+                    name="Javascript" 
+                    icon="/skills/logos/javascript"
+                    description={`
+                        A gold standard in web development.
+                        Javascript also happens to be the first language I picked up.
+                    `}>
+                    <span class="bg-gold badge"></span>
+                </SkillCard>
+                <SkillCard 
+                    name="Typescript" 
+                    icon="/skills/logos/typescript"
+                    description={`
+                        Although not perfect, Typescript is a much nicer variant of Javascript to work with.
+                    `}>
+                    <span class="bg-gold badge"></span>
+                </SkillCard>
+                <SkillCard 
+                    name="C/C++" 
+                    icon="/skills/logos/c++"
+                    description={`
+                        I consider both languages as one since the latter is a superset of the former.
+                        I prefer Rust over both.
+                    `}>
+                    <span class="bg-gold badge"></span>
+                </SkillCard>
+                <SkillCard 
+                    name="Python" 
+                    icon="/skills/logos/python"
+                    description={`
+                        Although I am proficient in Python, I don't use it merely enough to say that I am very familiar with it.
+                    `}>
+                    <span class="bg-silver badge"></span>
+                </SkillCard>
+                <SkillCard 
+                    name="C#" 
+                    icon="/skills/logos/csharp"
+                    description={`
+                        I pretty much only use C# for Unity game development which I don't do all that often.
+                    `}>
+                    <span class="bg-silver badge"></span>
+                </SkillCard>
+                <SkillCard 
+                    name="Java" 
+                    icon="/skills/logos/java"
+                    description={`
+                        To be honest, I haven't used Java in over 3 years.
+                        You can probably infer how I feel about the language
+                    `}>
+                    <span class="bg-silver badge"></span>
+                </SkillCard>
+                <SkillCard 
+                    name="CLisp" 
+                    icon="/skills/logos/commonlisp"
+                    description={`
+                        Common Lisp is at the center of all things Lisp.
+                    `}>
+                    <span class="bg-bronze badge"></span>
+                </SkillCard>
+                <SkillCard 
+                    name="Fennel" 
+                    icon="/skills/logos/fennel.svg"
+                    description={`
+                        An interesting alternative to Lua with syntax that is arguably better than Common Lisp's.
+                    `}>
+                    <span class="bg-bronze badge"></span>
+                </SkillCard>
+                <SkillCard 
+                    name="x86_64" 
+                    icon="/skills/logos/x86_64"
+                    description={`
+                        To be specific: Intel syntax with the 64-bit Linux syscalls.
+                    `}>
+                    <span class="bg-bronze badge"></span>
+                </SkillCard>
+                <SkillCard 
+                    name="6502" 
+                    icon="/skills/logos/6502"
+                    description={`
+                        This assembly takes you back to a time when CPUs were much much simplier.
+                    `}>
+                    <span class="bg-bronze badge"></span>
+                </SkillCard>
+                <SkillCard 
+                    name="Shaders" 
+                    icon="/skills/logos/shaders"
+                    description={`
+                        I am refering to GLSL, HLSL, WGLSL, etc.
+                        I'll include these because they're very important in my opinion.
+                    `}>
+                    <span class="bg-bronze badge"></span>
+                </SkillCard>
+            </div>
+            <div class="flex-1 flex-col">
+                <h2>Libraries</h2>
+                <h3 class="p-5">I'll try my best to include libraries and frameworks that people actually care about.<h3>
+                <h2>Libraries</h2>
+                <h2>Libraries</h2>
+                <h2>Libraries</h2>
+                <h2>Libraries</h2>
+                <h2>Libraries</h2>
+                <h2>Libraries</h2>
+                <h2>Libraries</h2>
+                <h2>Libraries</h2>
+                <h2>Libraries</h2>
+                <h2>Libraries</h2>
+                <h2>Libraries</h2>
+            </div>
+            <div class="flex-1 flex-col">
+                <h2>Tooling</h2>
+                <h3 class="p-5">This is for important tooling that I use or have used.<h3>
+                <h2>Tooling</h2>
+                <h2>Tooling</h2>
+                <h2>Tooling</h2>
+                <h2>Tooling</h2>
+                <h2>Tooling</h2>
+                <h2>Tooling</h2>
+                <h2>Tooling</h2>
+                <h2>Tooling</h2>
+                <h2>Tooling</h2>
+                <h2>Tooling</h2>
+                <h2>Tooling</h2>
+                <h2>Tooling</h2>
+                <h2>Tooling</h2>
+                <h2>Tooling</h2>
+            </div>
+        </div>
+    </div>
+</Layout>
+<style is:global>
+@tailwind components;
+
+@layer components {
+    .badge {
+        @apply inline-block w-6 h-6 my-2 mx-5 rounded-full
+    }
+}
+</style>
