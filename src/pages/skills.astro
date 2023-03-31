@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro'
 import SkillCard from '../components/SkillCard.astro'
 ---
 
-<Layout title="Skills" description="David's skills.">
+<Layout title="Skills" description="David's skills." useNavbar={true}>
     <div class="space-y-8">
         <h1 class="text-6xl">My (Tech) Skills</h1>
 
@@ -29,9 +29,9 @@ import SkillCard from '../components/SkillCard.astro'
         </div>
 
         <div class="flex flex-col lg:flex-row lg:mx-[-15rem]">
-            <div class="flex-1 flex-col px-10">
+            <div class="flex-1 flex-col px-4">
                 <h2 class="text-4xl">Languages</h2>
-                <h3 class="p-5" class="2xl">Of course, what's considered a language is controversial, and so is the notion of being "familiar" with one.<h3>
+                <h3 class="p-5 text-2xl">Of course, what's considered a language is controversial, and so is the notion of being "familiar" with one.<h3>
                 <SkillCard 
                     name="Rust" 
                     icon="/skills/logos/rust.svg"
@@ -109,7 +109,7 @@ import SkillCard from '../components/SkillCard.astro'
                     <span class="bg-bronze badge"></span>
                 </SkillCard>
                 <SkillCard 
-                    name="x86_64" 
+                    name="x86_64 Assembly" 
                     icon="/skills/logos/x86_64"
                     description={`
                         To be specific: Intel syntax with the 64-bit Linux syscalls.
@@ -117,7 +117,7 @@ import SkillCard from '../components/SkillCard.astro'
                     <span class="bg-bronze badge"></span>
                 </SkillCard>
                 <SkillCard 
-                    name="6502" 
+                    name="6502 Assembly" 
                     icon="/skills/logos/6502"
                     description={`
                         This assembly takes you back to a time when CPUs were much much simplier.
@@ -125,8 +125,8 @@ import SkillCard from '../components/SkillCard.astro'
                     <span class="bg-bronze badge"></span>
                 </SkillCard>
                 <SkillCard 
-                    name="Shaders" 
-                    icon="/skills/logos/shaders"
+                    name="Shading Languages" 
+                    icon="/skills/logos/nologo"
                     description={`
                         I am refering to GLSL, HLSL, WGLSL, etc.
                         I'll include these because they're very important in my opinion.
@@ -135,37 +135,126 @@ import SkillCard from '../components/SkillCard.astro'
                 </SkillCard>
             </div>
             <div class="flex-1 flex-col">
-                <h2 class="text-4xl">Libraries</h2>
-                <h3 class="p-5 text-2xl">I'll try my best to include libraries and frameworks that people actually care about.<h3>
-                <h2>Libraries</h2>
-                <h2>Libraries</h2>
-                <h2>Libraries</h2>
-                <h2>Libraries</h2>
-                <h2>Libraries</h2>
-                <h2>Libraries</h2>
-                <h2>Libraries</h2>
-                <h2>Libraries</h2>
-                <h2>Libraries</h2>
-                <h2>Libraries</h2>
-                <h2>Libraries</h2>
+                <div class="flex-1 flex-col px-4">
+                    <h2 class="text-4xl">Libraries</h2>
+                    <h3 class="p-5 text-2xl">I'll try my best to include major libraries and frameworks that people actually care about.<h3>
+                    <SkillCard 
+                        name="Tokio x Axum" 
+                        icon="/skills/logos/tokio"
+                        description={`
+                            Axum is an excellent backend framework.
+                        `}>
+                        <span class="bg-gold badge"></span>
+                    </SkillCard>
+                    <SkillCard 
+                        name="Express" 
+                        icon="/skills/logos/nologo"
+                        description={`
+                            A minimal backend library that everyone loves.
+                        `}>
+                        <span class="bg-gold badge"></span>
+                    </SkillCard>
+                    <SkillCard 
+                        name="OpenGL / WebGL" 
+                        icon="/skills/logos/opengl"
+                        description={`
+                            A classic rendering API that is virtually on every platform.
+                        `}>
+                        <span class="bg-gold badge"></span>
+                    </SkillCard>
+                    <SkillCard 
+                        name="Vulkan" 
+                        icon="/skills/logos/vulkan"
+                        description={`
+                            The overkill, power drill graphics API that we do not deserve.
+                        `}>
+                        <span class="bg-gold badge"></span>
+                    </SkillCard>
+                    <SkillCard 
+                        name="Tailwind" 
+                        icon="/skills/logos/tailwind"
+                        description={`
+                            Although messy, but Tailwind allows you to use CSS without CSS.
+                        `}>
+                        <span class="bg-gold badge"></span>
+                    </SkillCard>
+                    <SkillCard 
+                        name="React x NextJS" 
+                        icon="/skills/logos/react"
+                        description={`
+                            The Javascript UI framwork everyone and their mom has heard of paired with a not a framework meta framework.
+                        `}>
+                        <span class="bg-silver badge"></span>
+                    </SkillCard>
+                    <SkillCard 
+                        name="SolidJS" 
+                        icon="/skills/logos/solidjs"
+                        description={`
+                            The first good Javascript UI framework in my opinion.
+                        `}>
+                        <span class="bg-silver badge"></span>
+                    </SkillCard>
+                    <SkillCard 
+                        name="Astro" 
+                        icon="/skills/logos/astro"
+                        description={`
+                            Hey, this website uses Astro!
+                        `}>
+                        <span class="bg-silver badge"></span>
+                    </SkillCard>
+                    <SkillCard 
+                        name="Leptos" 
+                        icon="/skills/logos/leptos.svg"
+                        description={`
+                            The first good Rust UI framework.
+                        `}>
+                        <span class="bg-silver badge"></span>
+                    </SkillCard>
+                </div>
             </div>
             <div class="flex-1 flex-col">
-                <h2 class="text-4xl">Tooling</h2>
-                <h3 class="p-5 text-2xl">This is for important tooling that I use or have used.<h3>
-                <h2>Tooling</h2>
-                <h2>Tooling</h2>
-                <h2>Tooling</h2>
-                <h2>Tooling</h2>
-                <h2>Tooling</h2>
-                <h2>Tooling</h2>
-                <h2>Tooling</h2>
-                <h2>Tooling</h2>
-                <h2>Tooling</h2>
-                <h2>Tooling</h2>
-                <h2>Tooling</h2>
-                <h2>Tooling</h2>
-                <h2>Tooling</h2>
-                <h2>Tooling</h2>
+                <div class="flex-1 flex-col px-4">
+                    <h2 class="text-4xl">Tooling</h2>
+                    <h3 class="p-5 text-2xl">This is for unique or important tooling that I use or have used.<h3>
+                    <div class="flex-1 flex-col px-4">
+                        <SkillCard 
+                            name="Neovim" 
+                            icon="/skills/logos/neovim"
+                            description={`
+                                One of the only code editors I can tolerate.
+                            `}/>
+                        <SkillCard 
+                            name="CMake" 
+                            icon="/skills/logos/cmake"
+                            description={`
+                                One of the most user friendly build systems for C / C++.
+                            `}/>
+                        <SkillCard 
+                            name="Linux" 
+                            icon="/skills/logos/linux"
+                            description={`
+                                I currently daily drive a Linux system.
+                            `}/>
+                        <div class="text-2xl">
+                            Well, I'm not here to make an infinitely long list...
+                        </div>
+                    </div>
+                    <br>
+                    <h2 class="text-4xl">Hardware</h2>
+                    <h3 class="p-5 text-2xl">Physical hardware I've worked with.<h3>
+                        <SkillCard 
+                            name="Arduino Uno" 
+                            icon="https://cdn.shopify.com/s/files/1/0506/1689/3647/products/A000066_03.front_970c6014-61ab-4226-a20f-14cc6d8d682c_1200x600_crop_center.jpg?v=1629816078"
+                            description={`
+                                The classic microcontroller everyone knows of.
+                            `}/>
+                        <SkillCard 
+                            name="Raspberry Pi Pico W" 
+                            icon="https://de.farnell.com/productimages/large/en_GB/3996082-500.jpg"
+                            description={`
+                                Many of times faster than a mainframe from the 70s at the high cost of $6.
+                            `}/>
+                </div>
             </div>
         </div>
     </div>

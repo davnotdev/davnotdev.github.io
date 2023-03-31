@@ -15,7 +15,7 @@ let yearsSinceCodingStart = Math.floor(
 ) / 10;
 ---
 
-<Layout title="David's Home Page" description="Hi, I'm David, and this is my website!">
+<Layout title="David's Home Page" description="Hi, I'm David, and this is my website!" useNavbar={false}>
     <div class="text-center m-auto flex flex-col justify-center space-y-8">
         (🚧 Massive Site Overhaul in Progress!)
 
@@ -32,7 +32,7 @@ let yearsSinceCodingStart = Math.floor(
         <br>
 
         <div class="flex flex-col p-5 space-y-4 xl:flex-row xl:p-12 xl:space-x-10 m-auto justify-evenly bg-night-1">
-            <div class = "flex flex-col justify-evenly space-y-4">
+            <div class = "flex flex-col justify-start space-y-4 my-4">
                 <a class="index_box_button" href="/skills">
                     <div class="mx-auto text-center text-3xl">
                         My Skills
@@ -42,12 +42,6 @@ let yearsSinceCodingStart = Math.floor(
                 <a class="index_box_button" href="/blog">
                     <div class="mx-auto text-center text-3xl">
                         My Blog
-                    </div>
-                </a>
-
-                <a class="index_box_button" href="/blog">
-                    <div class="mx-auto text-center text-3xl">
-                        TODO
                     </div>
                 </a>
             </div>

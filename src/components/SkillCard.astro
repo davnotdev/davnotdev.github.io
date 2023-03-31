@@ -7,17 +7,19 @@ export interface Props {
 let { name, icon, description } = Astro.props;
 ---
 
-<div class="flex bg-night-1 my-10 justify-evenly max-w-lg">
-    <div class="p-10 text-xl">
-        { description }
-    </div>
-    <div class="flex flex-col p-5 space-y-10 place-items-end w-40">
-        <img 
-            src={ icon } alt="(An icon is meant to go here)"
-            class="bg-white w-28 h-28 rounded-xl p-5"></img>
-        <div class="flex">
-            <span class="text-3xl">{ name }</span>
+<div class="flex bg-night-1 my-5 justify-evenly max-w-lg">
+    <div class="flex flex-col place-items-end">
+        <div class="flex flex-row p-5 place-items-end">
+            <div class="px-10 text-xl">
+                { description }
+            </div>
+            <img 
+                src={ icon } alt="(An icon is meant to go here)"
+                class="bg-white w-28 h-28 max-w-max rounded-xl p-5"></img>
+        </div>
+        <div class="flex flex-row px-5 place-items-end">
             <slot/>
+            <span class="text-3xl py-1">{ name }</span>
         </div>
     </div>
 </div>

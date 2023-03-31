@@ -1,0 +1,18 @@
+<div class="flex flex-row py-8 justify-between">
+    <div class="px-10 text-4xl">
+        <code class="text-4xl">davnotdev</code>'s Site
+    </div>
+    <div class="px-20 space-x-4">
+        <a href="/" class="navbar-item">Home</a>
+        <a href="/blog" class="navbar-item">Blog</a>
+        <a href="/literallynothing" class="navbar-item">/dev/null</a>
+    </div>
+    <style is:global>
+    @tailwind components;
+    @layer components {
+        .navbar-item {
+            @apply bg-night-1 text-3xl py-3 px-6 rounded-xl hover:transform hover:scale-110;
+        }
+    }
+    </style>
+</div>
