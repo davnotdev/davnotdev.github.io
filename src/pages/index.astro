@@ -15,7 +15,7 @@ let yearsSinceCodingStart = Math.floor(
 ) / 10;
 ---
 
-<Layout title="David's Home Page" description="Hi, I'm David, and this is my website!" useNavbar={false}>
+<Layout title="David's Home Page" description="Hi, I'm David, and this is my website!" useNavbar={true}>
     <div class="text-center m-auto flex flex-col justify-center space-y-8">
         (🚧 Massive Site Overhaul in Progress!)
 
@@ -47,15 +47,14 @@ let yearsSinceCodingStart = Math.floor(
             </div>
             <Projects/>
         </div>
-
     </div>
-</Layout>
-<style is:global>
-@tailwind components;
+    <style is:global>
+    @tailwind components;
 
-@layer components {
-    .index_box_button {
-        @apply inline-flex bg-night-2 p-4 rounded-sm shadow-md max-w-2xl min-w-0 w-40 mx-auto hover:transform hover:scale-110 hover:drop-shadow-2xl;
+    @layer components {
+        .index_box_button {
+            @apply inline-flex bg-night-2 p-4 rounded-sm shadow-md max-w-2xl min-w-0 w-40 mx-auto hover:transform hover:scale-110 hover:drop-shadow-2xl;
+        }
     }
-}
-</style>
+    </style>
+</Layout>

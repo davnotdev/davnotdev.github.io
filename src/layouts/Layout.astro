@@ -29,4 +29,9 @@ const { title, description, useNavbar} = Astro.props;
         <slot/>
 	</main>
 	</body>
+    <style is:global>
+        div > code, p > code {
+            @apply bg-night-2 px-2 py-1 rounded-lg;
+        }
+    </style>
 </html>

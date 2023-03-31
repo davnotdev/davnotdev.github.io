@@ -1,5 +1,6 @@
 ---
 layout: ../../layouts/BlogLayout.astro
+title: "Blog"
 ---
 
 # WIP Blog Page

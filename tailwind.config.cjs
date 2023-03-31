@@ -11,6 +11,7 @@ module.exports = {
         "night-2": "#29273d",
         "night-3": "#323049",
         "night-text": "#cee9ef",
+        "night-text-link": "#8c99d1",
 
         "gold": "#ffd700",
         "silver": "#c0c0c0",
