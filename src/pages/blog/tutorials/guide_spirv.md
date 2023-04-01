@@ -40,8 +40,6 @@ Rather, you use a higher level language like GLSL or WGLSL (one day perhaps) to
 compile with SPIR-V as the target.
 Well, that's how you're *supposed* to use it.
 
-`https://github.com/executablebooks/mdformat/issues?page=1&q=is%3Aissue+is%3Aopen < issue here, investigate tommorow`
-
 Welcome to the **Masochist's Guide to SPIR-V**.
 
 This is not a gentle guide.
@@ -51,6 +49,9 @@ Good luck.
 ## The Setup
 
 First, you need `spirv-as`, the assembler which you can find [here](https://github.com/KhronosGroup/SPIRV-Tools).
+`spirv-as` itself is not enough however as it will happily pass broken code.
+`spirv-val` is used to validate the generated SPIR-V.
+Then, you can go a step further and use `spirv-opt` for optimizations.
 
 Now, create a file called `hello.spas` which you can assemble with
 `spirv-as hello.spas -o hello.spv`.
@@ -103,55 +104,150 @@ optimization hints such as `Inline`, `Pure`, `DontInline`, etc.
 ## A Basic Function
 
 ```spirv
-            ; What type of shader is this?
-                OpCapability Shader
-                OpMemoryModel Logical Simple
-                OpEntryPoint Vertex %main "main"
-
-            ; Debug info
-                OpName %main "main" 
+            ; ...
 
             ; Declare types
-%void =         OpTypeVoid
-+ %float =      OpTypeFloat 32
-+ %func_void =  OpTypeFunction %void
-+ %func_x2inc = OpTypeFunction %float %float %float
-+ %ptr_float =  OpTypePointer Function %float
+%float =        OpTypeFloat 32
+%func_void =    OpTypeFunction %void
+%ptr_float =    OpTypePointer Function %float
+%func_myfunc =  OpTypeFunction %float %ptr_float
 
-+             ; Constants
-+ %float_0 =    OpConstant %float 0
-+ %float_1 =    OpConstant %float 1
-+ %float_2 =    OpConstant %float 2
-
+            ; Constants
+%float_1 =      OpConstant %float 1
+%float_2 =      OpConstant %float 2
             
             ; Function main
 %main =         OpFunction %void None %func_void
 %main_label =   OpLabel
 
-+ %final_res =  OpFunctionCall %float %x2inc %float2
+%var_float_2 =  OpVariable %ptr_float Function %float_2
+            ;   OpStore %ptr_float %float_2
+
+%final_res =    OpFunctionCall %float %my_func %var_float_2
 
                 OpReturn
                 OpFunctionEnd
 
-+          ; Function to double and increment a number
-+ %x2inc =      OpFunction %float None %func_x2inc
-+ %num =        OpFunctionParameter %ptr_float
-+ %x2inc_label =OpLabel
-+     
-+ %res0 =       OpVariable %ptr_float Function
-+               OpStore %res0 %num
-+ 
-+ %res1 =       OpFMul %float %res0 %float_2
-+ %res2 =       OpFAdd %res1 %float %float_1
-+                 
-+               OpReturnValue %res2
-+ 
-+               OpReturn
-+               OpFunctionEnd
+            ; Function: Multiply %num by 2 and add 1
+%my_func =      OpFunction %float None %func_myfunc
+%num =          OpFunctionParameter %ptr_float
+%my_fun_label = OpLabel
+
+%res0 =         OpLoad %float %num
+
+%res1 =         OpFMul %float %res0 %float_2
+%res2 =         OpFAdd %float %res1 %float_1
+
+                OpReturnValue %res2
+
+                OpFunctionEnd
+
 ```
 
-> I added diff indicators so that you know what I've added.
-> I despise tutorials that don't do this.
+> I've omitted a bit of the code.
+
+Most of this is pretty self explanatory, so I'll only explain those that are not.
+
+`OpTypeFunction` takes the return type, then an arbitrary number of parameters types.
+
+`OpLoad` and `OpStore` work exactly as pointers do in C.
+
+`OpVariable`'s `%float2` initializer is optional and must be a constant.
+Variables must also be a pointer type and declared at the top of the function, similar to C89.
+
+`%ptr_float`. defines a pointer to a float.
+The `Function` bit basically denotes that the value is scoped for its respective function.
+The same applies with `OpVariable`.
+
+In `OpFAdd`, `F` refers to floats.
+Now, you can probably infer that `OpIAdd` would refer to integers.
+
+## Control Flow and Loops
+
+```spirv
+		    ; Function: Add 1 to num1 four times if num2 is > 10.
+%my_func =      OpFunction %float None %func_myfunc
+%ptr_num1 =     OpFunctionParameter %ptr_float
+%ptr_num2 =     OpFunctionParameter %ptr_float
+%my_fun_label = OpLabel
+
+            ;   int i = 0;
+%i =            OpVariable %ptr_int Function %int_0
+%out =          OpVariable %ptr_float Function
+
+%num1 =         OpLoad %float %ptr_num1
+%num2 =         OpLoad %float %ptr_num2
+
+                OpStore %out %num1
+
+            ;   if(%num2 > 10)
+            ;   {
+%is_gt =        OpFOrdGreaterThan %bool %num2 %float_10
+                OpSelectionMerge %if_end None
+                OpBranchConditional %is_gt %if_label %if_end
+%if_label =     OpLabel
+
+            ;   for(; i < 4; i++)
+            ;   {
+
+                OpBranch %loop_label
+%loop_label =   OpLabel
+                OpLoopMerge %loop_break %continue None
+                OpBranch %merge_label
+%merge_label =  OpLabel
+%vali =         OpLoad %int %i
+%for_lt =       OpSLessThan %bool %vali %int_4
+                OpBranchConditional %for_lt %loop_if %loop_break
+%loop_if =      OpLabel
+
+%valout =       OpLoad %float %out
+%out_add_res =  OpFAdd %float %valout %float_1
+                OpStore %out %out_add_res
+
+                OpBranch %continue
+%continue =     OpLabel
+
+%res_i =        OpIAdd %int %vali %int_1
+                OpStore %i %res_i
+
+                OpBranch %loop_label
+            ;   }
+%loop_break =   OpLabel
+
+                OpBranch %if_end
+            ;   }
+%if_end =       OpLabel
+
+%res_out =      OpLoad %float %out
+                OpReturnValue %res_out
+
+                OpFunctionEnd
+```
+
+> Once again, I've omitted more code.
+
+Here, we check if `%num2` is greater than 10.
+If so, we run a loop that adds 1 to `%num1` 10 times.
+
+The if statement is pretty simple.
+
+`OpFOrdGreaterThan` does exactly what you think it does.
+You can find all the comparison operators [here](https://registry.khronos.org/SPIR-V/specs/unified1/SPIRV.html#_fp_fast_math_mode).
+For signed integers, the prefix `S` is used rather than `F`, and `U` for unsigned integers.
+Also, `Ord` is not apart of the name for integer conversions.
+Anyway, the conditional test is followed by `OpSelectionMerge` which basically defined the if statement's block, and `None` has to do with more optimization stuff.
+Finally `OpBranchConditional`takes the block jump label for a true condition followed by the jump label for a false condition.
+`OpBranchConditional` is followed by a label itself.
+
+The for loop portion is much more confusing.
+`OpLoopMerge` first takes the end of the block, then the continue which is essentially the `i++` in `for(i = 0; i < 4; i++)`.
+The conditional `i < 4` portion remains the same.
+
+Do note that SPIR-V is pedantic when it comes to labels.
+*Almost* all labels must be proceeded by an `OpBranch`.
+That's why you see the `OpBranch %continue` right before the `%continue = OpLabel`.
+That is required.
+
 
 ```plaintext
    +---------------+
