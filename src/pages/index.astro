@@ -1,18 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Projects from '../components/Projects.astro'
-
-//  Good enough estimate I suppose.
-let month = 6;
-let codingStart = new Date(2019, month);
-let timeSinceCodingStart = Date.now() - codingStart.getTime();
-let dateSinceCodingStart = new Date(timeSinceCodingStart);
-let yearsSinceCodingStart = Math.floor(
-    (   
-        (Math.abs(dateSinceCodingStart.getUTCFullYear() - 1970) +
-        dateSinceCodingStart.getMonth() / 12) * 10
-    )
-) / 10;
 ---
 
 <Layout title="David's Home Page" description="Hi, I'm David, and this is my website!" useNavbar={true}>
@@ -23,10 +11,10 @@ let yearsSinceCodingStart = Math.floor(
 
         <div class="text-[1.8rem]">I'm some guy who knows a lot yet very little.</div>
         <div class="text-[1.8rem]">
-            For the past {yearsSinceCodingStart} years, I've doing stupid things with programming.
+            For the past <span id="uhhowlong" is:raw></span> years, I've doing stupid things with programming.
         </div>
         <div class="text-[1.8rem]">
-            Although not entirely true, that's the focus purpose of this site.
+            This site will mostly be about my programming work.
         </div>
 
         <br>
@@ -59,4 +47,18 @@ let yearsSinceCodingStart = Math.floor(
         }
     }
     </style>
+    <script is:inline>
+        //  Good enough estimate I suppose.
+        let month = 6;
+        let codingStart = new Date(2019, month);
+        let timeSinceCodingStart = Date.now() - codingStart.getTime();
+        let dateSinceCodingStart = new Date(timeSinceCodingStart);
+        let yearsSinceCodingStart = Math.floor(
+            (   
+                (Math.abs(dateSinceCodingStart.getUTCFullYear() - 1970) +
+                dateSinceCodingStart.getMonth() / 12) * 10
+            )
+        ) / 10;
+        document.getElementById("uhhowlong").innerText = yearsSinceCodingStart;
+    </script>
 </Layout>

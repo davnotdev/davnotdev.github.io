@@ -20,6 +20,7 @@ Lot's of work in progress, but they will be finished soon ;).
 
 ## Tutorials
 
+- [Mom! Windows Broke my Fedora Again!](/blog/tutorials/windows_fedora)
 <!-- - [Vulkan: The Big Picture](/blog/tutorials/vulkan_big_picture) -->
 
 ## Cool Projects
