@@ -124,6 +124,8 @@ This should increase going forward.
 
 ### Uniform Buffers 
 
+
+<!--
 ```
 Descriptors
 Uniform Buffers
@@ -146,6 +148,7 @@ Render Pass / Subpass
 Dynamic Uniforms
 
 ```
+-->
 
 ```plaintext
    +---------------+
