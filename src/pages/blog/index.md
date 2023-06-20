@@ -25,4 +25,4 @@ Lot's of work in progress, but they will be finished soon ;).
 
 ## Cool Projects
 
-<!-- - [Mewo Explained \[0\]: The why and how of `mewo_galaxy`.](/blog/coolprojects/mewo_explained_0) -->
+- [Mewo Explained \[0\]: The why and how of `mewo_galaxy`.](/blog/coolprojects/mewo_explained_0)
