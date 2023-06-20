@@ -1,5 +1,7 @@
 ---
 layout: ../../../layouts/BlogLayout.astro
+title: "Vulkan's Big Picture"
+description: "Vulkan: The Big Picture. Explains the concepts of Vulkan in a simple manner."
 ---
 
 # Vulkan: The Big Picture

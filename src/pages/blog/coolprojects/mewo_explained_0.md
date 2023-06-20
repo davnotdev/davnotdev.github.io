@@ -1,8 +1,10 @@
 ---
 layout: ../../../layouts/BlogLayout.astro
+title: "Mewo"
+description: "An explanation of the Mewo Game Engine's ECS (Entity Component System) from https://github.com/davnotdev/mewo."
 ---
 
-# \# Mewo Explained [0] ~ 3/3/2023
+# Mewo Explained (3/3/2023)
 
 > You can watch Mewo evolve [on Github](https://github.com/davnotdev/mewo)
 

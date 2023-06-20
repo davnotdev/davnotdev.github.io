@@ -1,5 +1,7 @@
 ---
 layout: ../../../layouts/BlogLayout.astro
+title: "A Masochist's Guide to SPIR-V"
+description: "spirv / SPIR-V for masochist shader programmers."
 ---
 
 # A Masochist's Guide to SPIR-V

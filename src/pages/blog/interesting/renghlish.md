@@ -1,5 +1,7 @@
 ---
 layout: ../../../layouts/BlogLayout.astro
+title: "Renghlish"
+description: "Renghlish: An alternative way to write English."
 ---
 
 # Renghlish

@@ -1,5 +1,7 @@
 ---
 layout: ../../../layouts/BlogLayout.astro
+title: "Windows Broke my Fedora Again!"
+description: "Mom! Windows Broke my Fedora Again! For when Windows Update breaks Fedora by removing Fedora from the boot menu."
 ---
 
 # Mom! Windows Broke my Fedora Again!
