@@ -104,6 +104,11 @@ In Vulkan, buffers live in many different places.
 Some live only in GPU memory while other live in CPU memory.
 There are even buffers that live on the border of the two, but they do not
 apply here.
+CPU buffers can be "mapped" into CPU memory meaning that our code can access it
+directly.
+GPU buffers cannot be mapped, and CPU GPU border buffers can be.
+
+> "CPU GPU border buffer" is a term that I made up.
 
 In the case of vertex and index buffers, you want to create both a GPU and CPU buffer.
 As you cannot transfer data straight into GPU buffer, the typical convention is to
@@ -120,19 +125,108 @@ In order to keep data flowing efficiently, Vulkan allows you to use multiple
 sets of data.
 Ideally, data should be placed into these sets based on bind frequency.
 However, note that the max number of sets bound at a time is finite.
-Currently, I would call it safe to bind up to 32 descriptors as more than 58% of platforms
+Currently, I would consider it safe to bind up to 32 descriptors as more than 58% of platforms
 support this.
 This should increase going forward.
 
-### Uniform Buffers 
+### Storage and Uniform Buffers 
 
+Uniform buffers are where we store data that will can be changed per frame.
+In Vulkan, uniform buffers are just ordinary buffers that we point to using
+a descriptor.
+Though, unlike our vertex and index buffers, uniform buffers should ideally be
+stored in CPU GPU border buffers since we plan to update it every frame anyway.
+
+Considering that CPU GPU border buffer areas are typically limited in terms of
+memory, storage buffers are almost identical to uniform buffers, except that they
+are stored in GPU memory.
+Because of this, they will require a staging buffer for transfers.
+
+### Padding
+
+If you have written C or C++ for long enough, you'd probably know about padding.
+It's nice to think of a `struct` as a packed list of bytes, but for performance
+reasons, that not always the case.
+
+```c
+typedef struct {
+    uint8_t a;
+    uint32_t b;
+} A;
+
+sizeof(A) == 8
+```
+
+The reason why `A` is of size 8 and not 5 is because of the `uint32_t`.
+The `uint32_t` wants to live on in memory 4 byte aligned.
+`uint8_t` is 1 byte aligned, so since it doesn't meet this requirement,
+the compiler sneakily pads the structure like so:
+
+```c
+typedef struct {
+    uint8_t a;
+    uint8_t _1;
+    uint8_t _2;
+    uint8_t _3;
+    uint32_t b;
+} A;
+```
+
+If it weren't padded like this, the program would either run slower or crash
+entirely.
+
+For uniform and storage buffers, Vulkan has alignment requirements as well
+[which you can find here](https://registry.khronos.org/vulkan/specs/1.3-extensions/html/chap15.html#interfaces-resources-layout).
+I would explain further, but [this article does a much better job explaining than I ever could](https://fvcaputo.github.io/2019/02/06/memory-alignment.html).
+
+> Ok, padding isn't something that you need to know to see the big picture.
+> I just mentioned it here so that you can keep this in mind.
+
+## Images
+
+I talked all about memory in the form of buffers, but I have yet to touch on images,
+a quintessential part of the rendering process.
+As you may know, graphics programmers use images not just for storing colors, but also
+depth, normals, and more.
+For this reason, images come in different sizes and formats.
+Images are also created along side image views which (obviously) give the GPU a
+view into an image.
+
+Similar to vertex and index buffers, images should ideally live in GPU memory.
+For this reason, images also require a staging buffer.
+
+When creating the image, we use commands to copy the data in.
+However, this time around, we need image memory barrier.
+In GPU memory, images are not stored in a way that you or I expect.
+Rather, they are stored in a layout designed to be optimal.
+This optimal layout varies across systems, so in typical Vulkan fashion, we need
+to manually change the layout to be optimal for transfer, then change it back.
+This is what an image memory barrier accomplishes.
+Remember them as we'll need them later on.
+
+> I mentioned commands here, but once again, I'll talk about commands later on.
+
+### Framebuffer and Attachment Images
+
+An attachment image is one that we attach to the render process.
+For example, if I want to render a triangle into an image, I'd need one color
+attachment image.
+If I also wanted depth, I'd need one more depth attachment image.
+For even more advanced rendering techniques like deferred rendering, I'd attach
+even more color attachment images.
+
+We have all of these attachment images, but how do we use them?
+Well, we need to create a framebuffer which we attach the image views of our
+attachment images to.
+A framebuffer also holds our render pass.
+
+### Render Pass and Sub-Passes
 
 <!--
 ```
-Descriptors
-Uniform Buffers
-Storage Buffers
-Padding
+Attachment Image
+Framebuffer
+Render Pass / Subpass
 
 Swapchain and Surface
 Double Buffering
@@ -143,12 +237,7 @@ Push Constants
 Command Buffers
 Submission and Synchronization
 
-Attachment Image
-Framebuffer
-Render Pass / Subpass
-
 Dynamic Uniforms
-
 ```
 -->
 
