@@ -1,17 +1,19 @@
-<div class="flex flex-row py-8 justify-between">
-    <div class="px-10 text-4xl">
-        <code class="text-4xl">davnotdev</code>'s Site
-    </div>
-    <div class="px-20 space-x-4">
-        <a href="/" class="navbar-item">Home</a>
+<div class="flex flex-col md:flex-row text-center md:text-left py-8 justify-between">
+    <a href="/" class="hover:text-white">
+        <div class="md:pl-5 xl:pl-10 pr-0 text-3xl md:text-4xl">
+            <code class="text-3xl xl:text-4xl">davnotdev</code>'s Site
+        </div>
+    </a>
+    <div class="flex flex-row justify-center md:pr-5 xl:pr-20 space-x-3">
         <a href="/blog" class="navbar-item">Blog</a>
+        <a href="https://www.github.com/davnotdev" class="navbar-item">Github</a>
         <a href="/literallynothing" class="navbar-item">/dev/null</a>
     </div>
     <style is:global>
     @tailwind components;
     @layer components {
         .navbar-item {
-            @apply bg-night-1 text-3xl py-3 px-6 rounded-xl hover:transform hover:scale-110;
+            @apply bg-night-1 text-xl md:text-3xl md:py-3 md:px-6 py-1 px-4 md:rounded-xl rounded-md hover:text-white;
         }
     }
     </style>
