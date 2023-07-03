@@ -2,6 +2,7 @@
 layout: ../../../layouts/BlogLayout.astro
 ---
 
+<!--
 # Modern Classic Tetris Is Alive, but Has Classic Tetris Died?
 
 TODO VISUAL
@@ -168,3 +169,4 @@ TODO PROOFREAD
 /_____________________\
 \_____________________/
 ```
+-->

@@ -2,6 +2,7 @@
 layout: ../../../layouts/BlogLayout.astro
 ---
 
+<!--
 # Dancing of the Line of Requirement with LISP
 
 I'm currently studying AP Computer Science Principles independently, and up to
@@ -152,3 +153,4 @@ Well, you've made it to the end of whatever this was.
 You've wasted enough time here.
 Go.
 Have a nice day.
+-->
